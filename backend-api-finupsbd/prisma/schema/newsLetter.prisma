@@ -1,0 +1,7 @@
+model NewsLetter {
+  id    String  @id @default(uuid())
+  name  String?
+  email String  @unique
+
+  @@map("newsLetter")
+}

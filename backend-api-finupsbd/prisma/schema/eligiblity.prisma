@@ -1,0 +1,108 @@
+/// Main eligibility model
+model EligibilityCheck {
+  id                  String             @id @default(uuid())
+  loanType            MainLoanType
+  gender              EGender
+  dateOfBirth         DateTime
+  profession          Profession
+  businessOwnerType   BusinessOwnerType?
+  businessType        String?
+  sharePortion        Int?
+  tradeLicenseAge     Int?
+  vehicleType         VehicleType?
+  expectedLoanTenure  Int?
+  monthlyIncome       Int?
+  jobLocation         String?
+  haveAnyRentalIncome Boolean?
+  rentalArea          String?
+  rentalIncome        Int?
+
+  haveAnyLoan         Boolean?       @default(false)
+  haveAnyCreditCard   Boolean?
+  numberOfCreditCards Int?
+  numberOfLoans       Int?
+  cardType            CardType?
+  cardLimitBDT        Int?
+  secondaryApplicant  Boolean?
+  termsAccepted       Boolean?
+  name                String
+  email               String
+  phone               String
+  isAppliedLoan       Boolean        @default(false)
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  existingLoans       ExistingLoan[]
+
+  @@index([loanType, name, email, phone, isAppliedLoan])
+  @@map("eligibilityCheck")
+}
+
+/// New model for each existing loan
+model ExistingLoan {
+  id                 String           @id @default(uuid())
+  existingLoanType   ExistingLoanType
+  emiAmountBDT       Int
+  interestRate       Decimal          @db.Decimal(5, 2)
+  eligibilityCheckId String
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  eligibilityCheck   EligibilityCheck @relation(fields: [eligibilityCheckId], references: [id], onDelete: Cascade)
+
+  @@index([eligibilityCheckId])
+  @@map("existingLoans")
+}
+
+/// Enums (unchanged)
+enum MainLoanType {
+  PERSONAL_LOAN
+  HOME_LOAN
+  CAR_LOAN
+  SME_LOAN
+  INSTANT_LOAN
+  /// Cards
+  CREDIT_CARD
+  DEBIT_CARD
+  TRAVEL_CARD
+  PREPAID_CARD
+}
+
+enum EGender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum Profession {
+  BUSINESS_OWNER
+  SALARIED
+  SELF_EMPLOYED
+}
+
+enum BusinessOwnerType {
+  PROPRIETORSHIP
+  PARTNERSHIP
+  PUBLIC_LIMITED_COMPANY
+}
+
+enum VehicleType {
+  CAR_SEDAN
+  CAR_SUV
+  CAR_HATCHBACK
+  BIKE
+}
+
+enum ExistingLoanType {
+  HOME_LOAN
+  PERSONAL_LOAN
+  CAR_LOAN
+  SME_LOAN
+  CREDIT_CARD
+  OTHER
+}
+
+enum CardType {
+  DEBIT_CARD
+  CREDIT_CARD
+  PREPAID_CARD
+  TRAVEL_CARD
+}

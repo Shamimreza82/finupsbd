@@ -1,0 +1,68 @@
+model Loan {
+  id            String            @id @default(uuid())
+  bankName      BankName
+  amount        String?
+  coverImage    String?
+  periodMonths  String?
+  processingFee String
+  interestRate  String
+  monthlyEmi    String?
+  totalAmount   String?
+  eligibleLoan  String?
+  loanType      LoanTypes
+  isActive      Boolean           @default(false)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  userId        String?
+  user          User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eligibility   EligibilityLoans?
+  feesCharges   FeesChargesLoans?
+  features      FeaturesLoans?
+  @@map("loans")
+}
+
+
+model FeaturesLoans {
+  id            String @id @default(uuid())
+  loanAmount    String
+  minimumAmount String
+  maximumAmount String
+  loanTenure    String
+  minimumYear   String
+  maximumYear   String
+  loanId        String @unique
+  loan          Loan   @relation(fields: [loanId], references: [id], onDelete: Cascade)
+}
+
+
+model EligibilityLoans {
+  id                String @id @default(uuid())
+  condition         String
+  offer             String
+  minimumIncome     Int
+  minimumExperience Int
+  ageRequirement    Int
+  loanId            String @unique
+  loan              Loan   @relation(fields: [loanId], references: [id], onDelete: Cascade)
+}
+
+
+model FeesChargesLoans {
+  id                  String @id @default(uuid())
+  processingFee       String
+  earlySettlementFee  String
+  prepaymentFee       String
+  LoanReSchedulingFee String
+  penalCharge         String
+  loanId              String @unique
+  loan                Loan   @relation(fields: [loanId], references: [id], onDelete: Cascade)
+}
+
+
+enum LoanTypes {
+  PERSONAL_LOAN
+  HOME_LOAN
+  CAR_LOAN
+  SME_LOAN
+  INSTANT_LOAN
+}

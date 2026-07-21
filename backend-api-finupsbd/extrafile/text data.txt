@@ -1,0 +1,117 @@
+{
+
+  "applicationId": "APP-2025001",
+  "status": "PENDING",
+  "userInfo": {
+    "id": "b1df53f4-38f3-4902-8658-501f57ebf88d",
+    "fullName": "John Doe",
+    "fatherName": "Richard Doe",
+    "motherName": "Jane Doe",
+    "spouseName": "Emily Doe",
+    "dateOfBirth": "2005-01-24",
+    "placeOfBirth": "Dhaka",
+    "gender": "MALE",
+    "maritalStatus": "MARRIED",
+    "nid": "12345678912",
+    "birthRegistration": null,
+    "mobileNumber": "+880123456789",
+    "alternateNumber": "+880987654321",
+    "emailAddress": "john.doe@example.com",
+    "socialMediaLinks": [
+      "https://facebook.com/johndoe",
+      "https://linkedin.com/in/johndoe"
+    ],
+    "propertyType": "RESIDENTIAL",
+    "approximateValue": 5000000,
+    "applicationFormId": "cf4e2c79-0b5d-4d7c-8a6a-5b93276d73f1"
+  },
+  "currentAddress": {
+    "id": "a3f7d9f1-bb59-42e9-99b6-58c315a52b87",
+    "houseFlatNo": "123",
+    "streetRoad": "Main Street",
+    "areaLocality": "Dhanmondi",
+    "city": "Dhaka",
+    "district": "Dhaka",
+    "postalCode": "1205",
+    "lengthOfStayYears": 5,
+    "ownershipStatus": "RENTED",
+    "applicationFormId": "cf4e2c79-0b5d-4d7c-8a6a-5b93276d73f1"
+  },
+  "permanentAddress": {
+    "id": "c2a8e8db-9e4a-4867-8ff6-3a7ed528b913",
+    "houseFlatNo": "456",
+    "streetRoad": "Green Road",
+    "areaLocality": "Mohammadpur",
+    "city": "Dhaka",
+    "district": "Dhaka",
+    "postalCode": "1207",
+    "lengthOfStayYears": 10,
+    "ownershipStatus": "OWNED",
+    "applicationFormId": "cf4e2c79-0b5d-4d7c-8a6a-5b93276d73f1"
+  },
+  "employmentFinancialInfo": {
+    "id": "d4e1f7c8-a8c3-4e22-94ef-23f653fbb598",
+    "employmentStatus": "SALARIED",
+    "jobTitle": "Software Engineer",
+    "employerName": "Tech Solutions Ltd.",
+    "officeAddress": "Banani, Dhaka",
+    "department": "IT",
+    "contactDetails": "+880123456789",
+    "businessName": "1236544",
+    "businessRegistrationNumber": "1236544",
+    "employmentTenureYears": 3,
+    "monthlyGrossIncome": 150000,
+    "otherSourcesOfIncome": "Freelancing",
+    "totalMonthlyExpenses": 40000,
+    "profession": "Engineer",
+    "taxIdentificationNumber": "TIN123456254",
+    "currentCreditScore": 750,
+    "applicationFormId": "cf4e2c79-0b5d-4d7c-8a6a-5b93276d73f1"
+  },
+  "loanSpecifications": {
+    "id": "e7a8c4f5-7b3a-4d8f-b24f-3b7e67acb79a",
+    "loanType": "PERSONAL",
+    "loanAmountRequested": 500000,
+    "purposeOfLoan": "Medical Expenses",
+    "preferredLoanTenure": 12,
+    "proposedEMIStartDate": "2025-02-01T00:00:00.000Z",
+    "repaymentPreferences": "Equal Installments",
+    "applicationFormId": "cf4e2c79-0b5d-4d7c-8a6a-5b93276d73f1"
+  },
+  "financialObligations": [
+    {
+      "id": "fa2e8dbb-3e49-4f7b-84b9-3b7f5678c123",
+      "lenderName": "Bank Ltd.",
+      "loanBalance": 200000,
+      "monthlyEMI": 10000,
+      "remainingTenure": 12,
+      "cardIssuer": "Visa",
+      "currentBalance": 50000,
+      "minimumMonthlyPayment": 5000,
+      "obligationType": "Credit Card",
+      "balance": 100000,
+      "emi": 8000,
+      "applicationFormId": "cf4e2c79-0b5d-4d7c-8a6a-5b93276d73f1"
+    }
+  ],
+  "uploadedDocuments": [
+    {
+      "id": 1,
+      "type": "PASSPORT_PHOTO",
+      "filePath": "/uploads/passport_photo.jpg",
+      "uploadedAt": "2025-01-23T10:10:00.000Z",
+      "fileSizeMB": 0.5,
+      "fileType": "jpg",
+      "applicationFormId": "cf4e2c79-0b5d-4d7c-8a6a-5b93276d73f1"
+    },
+    {
+      "id": 2,
+      "type": "NATIONAL_ID",
+      "filePath": "/uploads/nid.jpg",
+      "uploadedAt": "2025-01-23T10:15:00.000Z",
+      "fileSizeMB": 0.3,
+      "fileType": "jpg",
+      "applicationFormId": "cf4e2c79-0b5d-4d7c-8a6a-5b93276d73f1"
+    }
+  ]
+}

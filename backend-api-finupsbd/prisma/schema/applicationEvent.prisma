@@ -1,0 +1,47 @@
+model ApplicationEvent {
+    id String @id @default(uuid())
+
+    // Core Event Info
+    eventType   EventType
+    description String? // General details or notes
+
+    // State Tracking
+    stateBefore String? // Previous state (e.g., PENDING, APPROVED)
+    stateAfter  String? // New state after the event
+
+    // Feedback / Messages
+    feedback String? // Admin feedback message
+    severity FeedbackLevel? // e.g., INFO, WARNING, ERROR
+
+    // Who created this event
+    createdBy   String? // user/admin id
+    createdRole UserRole? // distinguish if it’s user, admin, super admin, etc.
+    createdAt   DateTime  @default(now())
+
+    // Relations
+    applicationId       String
+    LoanApplicationForm LoanApplicationForm @relation(fields: [applicationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+// Enum for event categories
+enum EventType {
+    CREATE_APPLICATION
+    FILE_UPLOADED
+    STATUS_CHANGED
+    OTHER
+}
+
+// Enum for feedback levels
+enum FeedbackLevel {
+    INFO
+    WARNING
+    ERROR
+    CRITICAL
+}
+
+// Enum for role tracking
+enum UserRole {
+    USER
+    ADMIN
+    SUPER_ADMIN
+}

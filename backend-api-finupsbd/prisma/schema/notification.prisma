@@ -1,0 +1,47 @@
+model Notification {
+  id     String  @id @default(uuid())
+  userId String? // Null = global/system-wide notification
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title   String
+  message String
+  type    NotificationType @default(INFO)
+
+  actionUrl String? // e.g. link to page or resource
+  icon      String? // icon URL or icon name for UI display
+  priority  NotificationPriority @default(NORMAL)
+
+  isRead Boolean   @default(false)
+  readAt DateTime?
+
+  expiresAt   DateTime?
+  scheduledAt DateTime? // future delivery time
+  sentAt      DateTime? // when actually delivered
+
+  meta Json? // additional custom data for flexibility
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([expiresAt])
+  @@index([scheduledAt])
+  @@map("notifications")
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+  PROMOTION
+  SYSTEM
+}
+
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  CRITICAL
+}

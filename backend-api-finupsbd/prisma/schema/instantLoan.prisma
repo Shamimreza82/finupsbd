@@ -1,0 +1,57 @@
+model InstantLoan {
+  id                     String                  @id @default(uuid())
+  bankName               String
+  amount                 String?
+  coverImage             String?
+  periodMonths           String?
+  processingFee          String
+  interestRate           String
+  monthlyEmi             String?
+  totalAmount            String?
+  eligibleLoan           String?
+  loanType               String                  @default("INSTANT_LOAN")
+  isActive               Boolean                 @default(true)
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  userId                 String?
+  user                   User?                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  EligibilityInstantLoan EligibilityInstantLoan?
+  FeesChargesInstantLoan FeesChargesInstantLoan?
+  FeaturesInstantLoan    FeaturesInstantLoan?
+
+  @@map("instantLoans")
+}
+
+model FeaturesInstantLoan {
+  id            String      @id @default(uuid())
+  loanAmount    String
+  minimumAmount String
+  maximumAmount String
+  loanTenure    String
+  minimumYear   String
+  maximumYear   String
+  InstantLoanId String      @unique
+  instantLoan   InstantLoan @relation(fields: [InstantLoanId], references: [id], onDelete: Cascade)
+}
+
+model EligibilityInstantLoan {
+  id                String      @id @default(uuid())
+  condition         String
+  offer             String
+  minimumIncome     Int
+  minimumExperience Decimal
+  ageRequirement    Int
+  InstantLoanId     String      @unique
+  instantLoan       InstantLoan @relation(fields: [InstantLoanId], references: [id], onDelete: Cascade)
+}
+
+model FeesChargesInstantLoan {
+  id                  String      @id @default(uuid())
+  processingFee       String
+  earlySettlementFee  String
+  prepaymentFee       String
+  LoanReSchedulingFee String
+  penalCharge         String
+  InstantLoanId       String      @unique
+  instantLoan         InstantLoan @relation(fields: [InstantLoanId], references: [id], onDelete: Cascade)
+}

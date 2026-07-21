@@ -1,0 +1,7 @@
+model prompthHistory {
+  id          String   @id @default(uuid())
+  sessionId   String
+  userPrompth String
+  aiResponce  String
+  createdAt   DateTime @default(now())
+}

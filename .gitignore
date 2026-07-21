@@ -1,0 +1,21 @@
+# root monorepo
+node_modules/
+.commandcode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# env
+.env
+.env.local
+.env.*.local
+
+# logs
+*.log

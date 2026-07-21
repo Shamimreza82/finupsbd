@@ -1,0 +1,73 @@
+///////   Salaried 
+
+{
+    "LoanType": "PERSONAL_LOAN",
+    "gender": "MALE",
+    "dateOfBirth": "1980-01-01",
+    "profession": "SALARIED",
+    "expectedLoanTenure": 12,
+    "monthlyIncome": 40000,
+    "jobLocation": "DHAKA", 
+    "haveAnyRentalIncome": true,
+        "selectArea": "Gazipur",
+        "rentalIncome": 40000,
+    "haveAnyLoan": true,
+        "numberOfLoan": 2,
+        "loanType": "HOME_LOAN",
+        "EMIAmountBDT": 15000,
+        "InterestRate": 10.1,
+    "haveAnyCreditCard": true,
+        "numberOfCard": 2,
+        "cardType": "CREDIT_CARD",
+        "cardLimitBDT": 200000, 
+    "secondaryApplicant": false,
+    "name": "reza",
+    "email": "shamimrezaone@gmail.com",
+    "phone": "01910479167"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///// Business owner
+
+{
+    "LoanType": "PERSONAL_LOAN",
+    "gender": "MALE",
+    "dateOfBirth": "1980-01-01",
+    "profession": "BUSINESS_OWNER",
+         "businessOwnerType": "patner",
+         "businessType": "", 
+         "sharePortion": 20, 
+         "tradeLicenseAge": 2,
+    "vehicleType": "CAR",
+    "expectedLoanTenure": 12,
+    "monthlyIncome": 40000,
+    "jobLocation": "DHAKA", 
+    "haveAnyRentalIncome": true,
+        "selectArea": "Gazipur",
+        "rentalIncome": 40000,
+    "haveAnyLoan": true,
+        "numberOfLoan": 2,
+        "loanType": "HOME_LOAN",
+        "EMIAmountBDT": 15000,
+        "InterestRate": 10.1,
+    "haveAnyCreditCard": true,
+        "numberOfCard": 2,
+        "cardType": "CREDIT_CARD",
+        "cardLimitBDT": 200000, 
+    "secondaryApplicant": false,
+    "name": "reza",
+    "email": "shamimrezaone@gmail.com",
+    "phone": "01910479167"
+}

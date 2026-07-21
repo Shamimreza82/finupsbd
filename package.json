@@ -1,0 +1,13 @@
+{
+  "name": "finupsbd-monorepo",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n backend,client,admin -c blue,green,yellow \"cd backend-api-finupsbd && npm run dev\" \"cd fronend-client-finupsbd && npm run dev\" \"cd admin-dashboard-finupsbd && npm run dev\"",
+    "dev:backend": "cd backend-api-finupsbd && npm run dev",
+    "dev:client": "cd fronend-client-finupsbd && npm run dev",
+    "dev:admin": "cd admin-dashboard-finupsbd && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

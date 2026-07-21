@@ -1,0 +1,141 @@
+model User {
+  id                  String                @id @default(uuid())
+  userId              String?
+  name                String?
+  email               String                @unique
+  phone               String                @unique
+  password            String
+  pin                 String?
+  pinExpiry           DateTime?
+  verificationToken   String?
+  resetPasswordToken  String?
+  resetPasswordExpiry DateTime?
+  role                Role                  @default(USER)
+  emailVerified       Boolean               @default(false)
+  phoneVerified       Boolean               @default(false)
+  isActive            Boolean               @default(true)
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  lastLogin           DateTime?
+  profile             Profile?
+  kycVerification     KycVerification?
+  blogPost            Blog[]
+  personalLoan        PersonalLoan[]
+  session             Session[]
+  pageView            PageView[]
+  activity            Activity[]
+  InstantLoan         InstantLoan[]
+  comments            Comment[]
+  LoanApplicationForm LoanApplicationForm[]
+  notification        Notification[]
+  loans               Loan[]
+  cards               Card[]
+  insurance           Insurance[]
+
+  @@index([email])
+  @@index([phone])
+  @@index([role])
+  @@index([isActive])
+  @@map("users")
+}
+
+model Profile {
+  id               String            @id @default(uuid())
+  nameAsNid        String
+  nationalIdNumber String
+  gender           UserProfileGender
+  dateOfBirth      DateTime
+  avatar           String?
+  address          String?
+  city             String
+  userId           String            @unique
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+}
+
+model KycVerification {
+  id                 String             @id @default(cuid())
+  fullName           String
+  fatherName         String?
+  motherName         String?
+  dateOfBirth        DateTime
+  gender             UserProfileGender
+  nationality        String
+  occupation         String?
+  documentType       DocumentTypeKyc
+  documentNumber     String
+  documentFrontUrl   String
+  documentBackUrl    String?
+  addressLine1       String
+  addressLine2       String?
+  city               String
+  state              String
+  postalCode         String
+  country            String
+  addressProofUrl    String
+  selfieUrl          String
+  verificationStatus VerificationStatus @default(PENDING)
+  remarks            String?
+  verifiedAt         DateTime?
+  userId             String             @unique
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  user               User               @relation(fields: [userId], references: [id])
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  createdAt DateTime @default(now())
+  ip        String?
+  device    String?
+  browser   String?
+  location  String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PageView {
+  id        String   @id @default(uuid())
+  userId    String
+  path      String
+  duration  Int?
+  createdAt DateTime @default(now())
+  referrer  String?
+  os        String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Activity {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String
+  details   String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum UserProfileGender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum DocumentTypeKyc {
+  NATIONAL_ID
+  PASSPORT
+  DRIVING_LICENSE
+  VOTER_ID
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}

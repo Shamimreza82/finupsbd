@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "CardTypes" ADD VALUE 'TRAVEL_CARD';

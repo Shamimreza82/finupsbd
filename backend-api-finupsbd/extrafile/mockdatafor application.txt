@@ -1,0 +1,114 @@
+{
+  "applicationId": "APP-001",
+  "userId": "user-uuid",
+  "personalLoanId": null,
+  "status": "PENDING",
+  "userInfo": {
+    "fullName": "John Doe",   
+    "fatherName": "Richard Doe",
+    "motherName": "Jane Doe",
+    "spouseName": "Mary Doe",
+    "dateOfBirth": "1980-01-01",
+    "placeOfBirth": "Metropolis",
+    "gender": "MALE",
+    "maritalStatus": "MARRIED",
+    "birthRegistration": "BR987654321",    (Optonal)
+    "mobileNumber": "+1234567890",
+    "alternateNumber": "+0987654321", 
+    "emailAddress": "john.doe@example.com", 
+  },
+residentialInformation: {
+ "permanentAddress": {     
+    "houseFlatNo": "12B",
+    "streetRoad": "Maple Street",
+    "areaLocality": "Downtown",
+    "city": "Metropolis",
+    "district": "Central",
+    "postalCode": "12345",
+    "lengthOfStayYears": 5,
+    "ownershipStatus": "OWNED",
+  },
+  "presentAddress": {     
+    "houseFlatNo": "12B",
+    "streetRoad": "Maple Street",
+    "areaLocality": "Downtown",
+    "city": "Metropolis",
+    "district": "Central",
+    "postalCode": "12345",
+    "lengthOfStayYears": 5,
+    "ownershipStatus": "OWNED",
+  },
+
+}
+
+  "employmentFinancialInfo": { 
+    "employmentStatus": "SALARIED",
+    "jobTitle": "Software Engineer",
+    "employerName": "Tech Corp",
+    "officeAddress": "123 Tech Avenue, Metropolis",
+    "department": "Engineering",
+    "contactDetails": "+1234567890",
+    "businessName": null,
+    "businessRegistrationNumber": null,
+    "employmentTenureYears": 10,
+    "monthlyGrossIncome": 6000.5,
+    "otherSourcesOfIncome": "Freelancing",
+    "totalMonthlyExpenses": 3000.75,
+    "profession": "IT",
+    "taxIdentificationNumber": "TIN123456",
+    "currentCreditScore": 750,
+  },
+  "loanSpecifications": {
+    "loanType": "HOME",
+    "loanAmountRequested": 200000.0,
+    "purposeOfLoan": "Home purchase",
+    "preferredLoanTenure": 30,
+    "proposedEMIStartDate": "2025-04-01T00:00:00Z",
+    "repaymentPreferences": "Monthly",
+  },
+  "financialObligations": {
+      "lenderName": "Bank A",
+      "loanBalance": 10000.0,
+      "monthlyEMI": 300.0,
+      "remainingTenure": 36,
+      "cardIssuer": null,
+      "currentBalance": null,
+      "minimumMonthlyPayment": null,
+      "type": "Credit Card",
+      "balance": 10000.0,
+      "emi": 300.0,
+      "fullNameCoApplicant: "reza", 
+      "relationshipToApplicant": "", 
+      "employmentMonthlyIncome": "",  
+    }, 
+}
+
+
+
+  "uploadedDocuments": [
+    {
+      "id": 1,
+      "type": "PASSPORT_PHOTO",
+      "filePath": "/uploads/documents/passport_photo.jpg",
+      "uploadedAt": "2025-03-08T12:05:00Z",
+      "fileSizeMB": 0.5,
+      "fileType": "image/jpeg",
+      "applicationFormId": "app-form-uuid"
+    },
+    {
+      "id": 2,
+      "type": "NATIONAL_ID",
+      "filePath": "/uploads/documents/national_id.pdf",
+      "uploadedAt": "2025-03-08T12:10:00Z",
+      "fileSizeMB": 1.2,
+      "fileType": "application/pdf",
+      "applicationFormId": "app-form-uuid"
+    }
+  ],
+
+
+
+
+    "propertyType": "RESIDENTIAL",
+    "approximateValue": 500000.0,
+    "applicationFormId": "app-form-uuid"

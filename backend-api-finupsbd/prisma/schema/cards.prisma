@@ -1,0 +1,109 @@
+model Card {
+  id                          String           @id @default(uuid())
+  cardName                    String
+  bankName                    BankName
+  cardImage                   String?
+  coverImage                  String?
+  interestPerDay              String?
+  freeAnnualFee               String?
+  regularAnnualFee            String?
+  interestFreePeriod          String?
+  latePaymentFees             String?
+  currency                    Currency
+  cardFeaturesType            CardFeaturesType
+  cardNetwork                 CardNetwork
+  annualFeeWaivedReward       String?
+  freeSupplementaryCards      String?
+  maxSupplementaryCards       String?
+  balanceTransferAvailability String?
+  ownBankATMFee               String?
+  otherBankATMFee             String?
+  loungeFacility              String?
+  loungeVisit                 String?
+  cardChequeProcessingFee     String?
+  processingFeeMinimum        String?
+  cashWithdrawalLimit         String?
+  cardType                    CardTypes
+  isActive                    Boolean          @default(false)
+  createdAt                   DateTime         @default(now())
+  updatedAt                   DateTime         @updatedAt
+
+  // Relation with user (if applicable)
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Sub-models
+  features    FeaturesCard?
+  eligibility EligibilityCard?
+  feesCharges FeesChargesCard?
+
+  @@map("cards")
+}
+
+model FeaturesCard {
+  id        String  @id @default(uuid())
+  features1 String?
+  features2 String?
+  features3 String?
+  features4 String?
+  features5 String?
+  cardId    String? @unique
+  card      Card?   @relation(fields: [cardId], references: [id], onDelete: Cascade)
+}
+
+model EligibilityCard {
+  id                String  @id @default(uuid())
+  condition         String?
+  offer             String?
+  minimumIncome     Int?
+  minimumExperience Int?
+  ageRequirement    Int?
+  cardId            String? @unique
+  card              Card?   @relation(fields: [cardId], references: [id], onDelete: Cascade)
+}
+
+model FeesChargesCard {
+  id                  String  @id @default(uuid())
+  annualFee           String?
+  annualFeeWaived     String?
+  latePaymentFee      String?
+  interestRate        String?
+  balanceTransferRate String?
+  cardId              String? @unique
+  card                Card?   @relation(fields: [cardId], references: [id], onDelete: Cascade)
+}
+
+enum CardTypes {
+  CREDIT_CARD
+  PREPAID_CARD
+  DEBIT_CARD
+  TRAVEL_CARD
+}
+
+enum Currency {
+  LOCAL     // BDT only; used for domestic transactions
+  DUAL      // BDT + USD; supports both local and international transactions
+  FOREIGN   // Foreign currency only (USD, EUR, GBP, etc.) – optional but useful
+}
+
+enum CardNetwork {
+  VISA        // Widely accepted, most common in Bangladesh
+  MASTERCARD  // Also very popular for both debit & credit cards
+  AMEX        // American Express, premium users (e.g., City Bank AMEX)
+  UNIONPAY    // Chinese network, offered by some banks (e.g., Eastern Bank, UCB)
+  NPSB        // National Payment Switch Bangladesh (local debit transactions)
+  QCASH       // Local network used by some smaller banks
+  DBBL_NEXUS  // Dutch-Bangla Bank’s own network (Nexus)
+  OTHER       // For any non-standard or new card networks
+}
+
+enum CardFeaturesType {
+  SILVER       // Entry-level cards, usually basic debit
+  CLASSIC      // Standard everyday use, low limit
+  STANDARD     // Mid-tier, often used for regular salary or savings accounts
+  GOLD         // Higher limit, added travel & shopping perks
+  PLATINUM     // Premium users, more cashback & airport lounge access
+  SIGNATURE    // Exclusive tier (mostly VISA Signature or Mastercard World)
+  TITANIUM     // Premium Mastercard tier (similar to Platinum)
+  PREMIUM      // Custom premium category (bank-defined)
+}

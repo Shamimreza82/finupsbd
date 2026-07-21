@@ -1,0 +1,57 @@
+model PersonalLoan {
+  id            String       @id @default(uuid())
+  bankName      String
+  amount        String?
+  coverImage    String?
+  periodMonths  String?
+  processingFee String
+  interestRate  String
+  monthlyEmi    String?
+  totalAmount   String?
+  eligibleLoan  String?
+  loanType      String       @default("PERSONAL_LOAN")
+  isActive      Boolean      @default(true)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  userId        String?
+  user          User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eligibility   Eligibility?
+  feesCharges   FeesCharges?
+  features      Features?
+
+  @@map("personalLoans")
+}
+
+model Features {
+  id             String       @id @default(uuid())
+  loanAmount     String
+  minimumAmount  String
+  maximumAmount  String
+  loanTenure     String
+  minimumYear    String
+  maximumYear    String
+  personalLoanId String       @unique
+  personalLoan   PersonalLoan @relation(fields: [personalLoanId], references: [id], onDelete: Cascade)
+}
+
+model Eligibility {
+  id                String       @id @default(uuid())
+  condition         String
+  offer             String
+  minimumIncome     Int
+  minimumExperience Int
+  ageRequirement    Int
+  personalLoanId    String       @unique
+  personalLoan      PersonalLoan @relation(fields: [personalLoanId], references: [id], onDelete: Cascade)
+}
+
+model FeesCharges {
+  id                  String       @id @default(uuid())
+  processingFee       String
+  earlySettlementFee  String
+  prepaymentFee       String
+  LoanReSchedulingFee String
+  penalCharge         String
+  personalLoanId      String       @unique
+  personalLoan        PersonalLoan @relation(fields: [personalLoanId], references: [id], onDelete: Cascade)
+}

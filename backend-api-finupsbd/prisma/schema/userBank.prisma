@@ -1,0 +1,25 @@
+enum UserBankRole {
+  BANK_USER
+}
+
+
+
+model UserBank {
+  id                  String       @id @default(uuid())
+  bankName            BankName     @unique
+  loginId             String       @unique @default("123456789")
+  email               String
+  password            String
+  phone               String
+  bankCode            String
+  isBlocked           Boolean      @default(false)
+  failedLoginAttempts Int          @default(0)
+  blockedAt           DateTime?
+  role                UserBankRole @default(BANK_USER)
+  isMEOSingnedIn      Boolean      @default(false)
+  isActive            Boolean      @default(true)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  @@map("userBanks")
+}
