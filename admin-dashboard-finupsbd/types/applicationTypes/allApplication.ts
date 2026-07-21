@@ -1,4 +1,5 @@
 import { TLoanStatusType } from "../sharedTypes";
+import { TModules } from "./qyeryTypes";
 
 
 type EligibleLoanOffer = {
@@ -56,9 +57,17 @@ export type TApplicationApiResponce = {
 
 
 export type PaginationMeta = {
-  total: number;      // total number of items across all pages
-  page: number;       // current page (1-based)
-  limit: number;      // items per page
-  totalPages: number; // total number of pages
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+};
+
+export type TApplicationQuery = {
+  searchTerm?: string;
+  module?: TModules;
+  status?: TLoanStatusType | "ALL";
+  page?: number;
+  limit?: number;
 };
 

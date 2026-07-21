@@ -1,10 +1,19 @@
 "use client"
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search } from "lucide-react";
+import { PRODUCT_TYPES } from "@/types/applicationTypes/qyeryTypes";
+
+const STATUS_OPTIONS = [
+  { value: "ALL", label: "All Status" },
+  { value: "SUBMITTED", label: "Submitted" },
+  { value: "PENDING", label: "Pending" },
+  { value: "APPROVED", label: "Approved" },
+  { value: "REJECTED", label: "Rejected" },
+  { value: "COMPLETED", label: "Completed" },
+] as const;
 
 export function ApplicationsFilter({
   onFilterChange,
@@ -18,27 +27,31 @@ export function ApplicationsFilter({
   const [searchTerm, setSearchTerm] = useState("");
   const [productType, setProductType] = useState("ALL");
   const [status, setStatus] = useState("ALL");
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const productTypeRef = useRef(productType);
+  const statusRef = useRef(status);
+  productTypeRef.current = productType;
+  statusRef.current = status;
 
-
-  const handleFilterChange = () => {
-    onFilterChange({ searchTerm, productType, status });
-  };
-
+  useEffect(() => {
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      onFilterChange({ searchTerm, productType: productTypeRef.current, status: statusRef.current });
+    }, 300);
+    return () => clearTimeout(debounceRef.current);
+  }, [searchTerm, onFilterChange]);
 
   return (
     <div className="flex flex-col gap-4 md:flex-row">
-      <div className="flex w-full items-center space-x-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search applications..."
-            className="w-full pl-8"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <Button type="submit" onClick={handleFilterChange}>Search</Button>
+      <div className="relative flex-1">
+        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Input
+          type="search"
+          placeholder="Search applications..."
+          className="w-full pl-8"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
 
       <div className="flex flex-col gap-4 md:flex-row">
@@ -54,14 +67,11 @@ export function ApplicationsFilter({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="ALL">All Products</SelectItem>
-          <SelectItem value="PERSONAL_LOAN">Personal Loan</SelectItem>
-          <SelectItem value="HOME_LOAN">Home Loan</SelectItem>
-          <SelectItem value="CAR_LOAN">Car Loan</SelectItem>
-          <SelectItem value="SME_LOAN">SME Loan</SelectItem>
-          <SelectItem value="INSTANT_LOAN">Instant Loan</SelectItem>
-          <SelectItem value="CREDIT_CARD">Credit Card</SelectItem>
-          <SelectItem value="PREPAID_CARD">Prepaid Card</SelectItem>
-          <SelectItem value="TRAVEL_CARD">Travel Card</SelectItem>
+            {PRODUCT_TYPES.map((p) => (
+              <SelectItem key={p.value} value={p.value}>
+                {p.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
 
@@ -76,12 +86,11 @@ export function ApplicationsFilter({
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="ALL">All Status</SelectItem>
-            <SelectItem value="SUBMITTED">Submitted</SelectItem>
-            <SelectItem value="PENDING">Pending</SelectItem>
-            <SelectItem value="APPROVED">Approved</SelectItem>
-            <SelectItem value="REJECTED">Rejected</SelectItem>
-            <SelectItem value="COMPLETED">Completed</SelectItem>
+            {STATUS_OPTIONS.map((s) => (
+              <SelectItem key={s.value} value={s.value}>
+                {s.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>

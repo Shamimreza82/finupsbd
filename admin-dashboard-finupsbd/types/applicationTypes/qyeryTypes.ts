@@ -22,3 +22,14 @@ export type TModulesCards = (typeof ModulesCards)[keyof typeof ModulesCards];
 
 export type TModules = TModulesLoans | TModulesCards | "ALL";
 
+export const PRODUCT_TYPES: { value: TModules; label: string }[] = [
+  { value: "PERSONAL_LOAN", label: "Personal Loan" },
+  { value: "HOME_LOAN", label: "Home Loan" },
+  { value: "CAR_LOAN", label: "Car Loan" },
+  { value: "SME_LOAN", label: "SME Loan" },
+  { value: "INSTANT_LOAN", label: "Instant Loan" },
+  { value: "CREDIT_CARD", label: "Credit Card" },
+  { value: "PREPAID_CARD", label: "Prepaid Card" },
+  { value: "TRAVEL_CARD", label: "Travel Card" },
+];
+

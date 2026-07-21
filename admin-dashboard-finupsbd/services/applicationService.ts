@@ -1,23 +1,15 @@
 'use server'
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from "@/lib/axios";
+import { TApplicationBaseApiResponce } from "@/types/applicationTypes/allApplication";
 import { TLoanStatusType } from "@/types/sharedTypes";
-import { cookies } from "next/headers";
 
 
 
 
-export const getAllApplications = async (filters: Record<string, any>) => {
-  // Remove empty, null, undefined and "all"
+export const getAllApplications = async (filters: Record<string, unknown>): Promise<TApplicationBaseApiResponce> => {
   const cleanedFilters: Record<string, string> = {};
-
   Object.entries(filters).forEach(([key, value]) => {
-    if (
-      value !== undefined &&
-      value !== null &&
-      value !== "" &&
-      value !== "ALL"
-    ) {
+    if (value !== undefined && value !== null && value !== "") {
       cleanedFilters[key] = String(value);
     }
   });
@@ -30,8 +22,14 @@ export const getAllApplications = async (filters: Record<string, any>) => {
       headers: {
         "Content-Type": "application/json",
       },
+      cache: "no-store",
     }
   );
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || `Request failed: ${res.status}`);
+  }
 
   return res.json();
 };

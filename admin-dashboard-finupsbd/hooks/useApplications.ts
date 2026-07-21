@@ -1,19 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// hooks/useApplications.ts
 import { getAllApplications } from '@/services/applicationService';
-import { TApplicationBaseApiResponce } from '@/types/applicationTypes/allApplication';
-
+import { TApplicationBaseApiResponce, TApplicationQuery } from '@/types/applicationTypes/allApplication';
 import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from './queryKeys';
 
-
-export const useApplications = (filters?: Record<string, any>) => {
-
+export const useApplications = (filters?: TApplicationQuery) => {
   return useQuery<TApplicationBaseApiResponce, Error>({
-    queryKey: ['applications', filters],
+    queryKey: [...queryKeys.applications.all, filters],
     queryFn: () => getAllApplications(filters ?? {}),
-    staleTime: Infinity, // never considered stale
-    // refetchOnWindowFocus: false,
-    // refetchOnMount: false,
-    // refetchOnReconnect: false,
+    staleTime: 30 * 1000,
+    placeholderData: (previousData) => previousData,
   });
 };
