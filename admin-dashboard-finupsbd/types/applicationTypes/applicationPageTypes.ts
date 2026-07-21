@@ -1,26 +1,55 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { TGuarantorInfo } from "./guarantorInfoTypes";
+
 export interface TApplicationData {
   adminNotes: string | null;
   applicationId: string;
-  businessGuarantor: any; // No data provided for structure
+  businessGuarantor: TGuarantorInfo | null;
   createdAt: string;
   document: Document[];
   additionalDocument: AdditionalDocument[];
   eligibleLoanOffer: EligibleLoanOffer;
-  employmentInformation: any; // No data provided
-  guarantorInfo: GuarantorInfo;
+  employmentInformation: EmploymentInformation | null;
+  guarantorInfo: GuarantorInfo | null;
   id: string;
   isActive: boolean;
   isDeleted: boolean;
   loanInfo: LoanInfo;
   loanRequest: LoanRequest;
-  personalGuarantor: any; // No data provided
+  personalGuarantor: TGuarantorInfo | null;
   personalInfo: PersonalInfo;
   residentialInformation: ResidentialInformation;
   status: string;
   updatedAt: string;
   user: User;
   userId: string;
+}
+
+export interface EmploymentInformation {
+  employeeId: string;
+  designation: string;
+  department: string;
+  dateOfJoining: string;
+  employmentStatus: string;
+  employmentType: string;
+  eTin: string;
+  organizationName: string;
+  organizationAddress: string;
+  officialContact: string;
+  institutionName?: string;
+  grossMonthlyIncome: string;
+  otherIncome: string;
+  otherProfession?: string;
+  businessName?: string;
+  businessAddress?: string;
+  businessRegistrationNumber?: string;
+  businessType?: string;
+  hasPreviousOrganization: boolean;
+  previousOrganizationName?: string;
+  previousDesignation?: string;
+  previousServiceYears?: number;
+  previousServiceMonths?: number;
+  professionalTitle?: string;
+  professionalRegistrationNumber?: string;
 }
 
 export interface Document {

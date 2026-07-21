@@ -20,17 +20,14 @@ import {
   Calendar,
   Shield,
   Download,
-  Eye,
   Calculator,
   CheckCircle,
   Phone,
   Printer,
-  Search,
   Activity,
   Moon,
   Sun,
   MessageSquare,
-  FileImage,
   Briefcase,
 } from "lucide-react"
 import { useState } from "react"
@@ -43,6 +40,7 @@ import { TLoanStatusType } from "@/types/sharedTypes"
 import { calculateEMI, formatDate, formatToBDTCurrency } from "@/lib/utils"
 import Image from "next/image"
 import GuarantorInfo from "./GuarantorInfo"
+import { DocumentTable } from "./DocumentTable"
 import dynamic from "next/dynamic"
 
 const PDFViewer = dynamic(
@@ -63,13 +61,17 @@ import Link from "next/link"
 
 export default function DetailsViewApplicationFrom({ applicationData }: { applicationData: TApplicationData }) {
   const [isDarkMode, setIsDarkMode] = useState(false)
-  // const [selectedDocument, setSelectedDocument] = useState(null)
-  // const [showEMICalculator, setShowEMICalculator] = useState(false)
-  const [searchTerm, setSearchTerm] = useState("")
-  // const [filterStatus, setFilterStatus] = useState("all")
-  const [loanAmount, setLoanAmount] = useState(100000)
-  const [interestRate, setInterestRate] = useState(12.75)
-  const [tenure, setTenure] = useState(24)
+  const [docSearchTerm, setDocSearchTerm] = useState("")
+  const [additionalDocSearchTerm, setAdditionalDocSearchTerm] = useState("")
+  const [loanAmount, setLoanAmount] = useState(
+    Number(applicationData.loanRequest.loanAmount) || 100000
+  )
+  const [interestRate, setInterestRate] = useState(
+    Number(applicationData.eligibleLoanOffer.interestRate) || 12.75
+  )
+  const [tenure, setTenure] = useState(
+    applicationData.loanRequest.loanTenure || 24
+  )
 
   return (
     <div className={`min-h-screen transition-colors duration-300 p-6`}>
@@ -96,8 +98,8 @@ export default function DetailsViewApplicationFrom({ applicationData }: { applic
               </div>
 
               <ApplicationFeedBackForm id={applicationData.id} />
-              <Button>
-                <Link href={`/dashboard/application/application-events/${applicationData.id}`} className="flex items-center">
+              <Button asChild>
+                <Link href={`/dashboard/application/application-events/${applicationData.id}`}>
                   Events
                 </Link>
               </Button>
@@ -114,7 +116,7 @@ export default function DetailsViewApplicationFrom({ applicationData }: { applic
                     Export PDF / Print
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-7xl max h-[80vh]">
+                <DialogContent className="max-w-7xl max-h-[80vh]">
                   <DialogHeader>
                     <DialogTitle>Loan Application PDF</DialogTitle>
                   </DialogHeader>
@@ -181,16 +183,16 @@ export default function DetailsViewApplicationFrom({ applicationData }: { applic
 
         {/* Main Content */}
         <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-8">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="personal">Personal Info</TabsTrigger>
-            <TabsTrigger value="financial">Financial Info</TabsTrigger>
-            <TabsTrigger value="employment">Employment Info</TabsTrigger>
-            <TabsTrigger value="guarantors">Guarantors</TabsTrigger>
-            <TabsTrigger value="offer">Loan Offer</TabsTrigger>
-            <TabsTrigger value="documents">Documents</TabsTrigger>
+          <TabsList className="flex w-full overflow-x-auto">
+            <TabsTrigger value="overview" className="shrink-0">Overview</TabsTrigger>
+            <TabsTrigger value="personal" className="shrink-0">Personal Info</TabsTrigger>
+            <TabsTrigger value="financial" className="shrink-0">Financial Info</TabsTrigger>
+            <TabsTrigger value="employment" className="shrink-0">Employment Info</TabsTrigger>
+            <TabsTrigger value="guarantors" className="shrink-0">Guarantors</TabsTrigger>
+            <TabsTrigger value="offer" className="shrink-0">Loan Offer</TabsTrigger>
+            <TabsTrigger value="documents" className="shrink-0">Documents</TabsTrigger>
             {
-              applicationData?.additionalDocument.length > 0 && <TabsTrigger value="additionalDoc">Additional Doc</TabsTrigger>
+              applicationData?.additionalDocument.length > 0 && <TabsTrigger value="additionalDoc" className="shrink-0">Additional Doc</TabsTrigger>
             }
           </TabsList>
 
@@ -905,125 +907,63 @@ export default function DetailsViewApplicationFrom({ applicationData }: { applic
                 <CardDescription>Contact information for guarantors</CardDescription>
               </CardHeader>
               <CardContent>
-                {applicationData.guarantorInfo ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Personal Guarantor */}
-                    <div className="space-y-4">
-                      <h4 className={`font-medium text-lg ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                        Personal Guarantor
-                      </h4>
-                      <div className="space-y-3">
-                        <div>
-                          <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Email</p>
-                          <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                            {applicationData.guarantorInfo.personalGurantorEmail}
-                          </p>
-                        </div>
-                        <div>
-                          <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Phone</p>
-                          <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                            {applicationData.guarantorInfo.personalGurantorphone}
-                          </p>
-                        </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Personal Guarantor */}
+                  <div className="space-y-4">
+                    <h4 className={`font-medium text-lg ${isDarkMode ? "text-white" : "text-gray-900"}`}>
+                      Personal Guarantor
+                    </h4>
+                    <div className="space-y-3">
+                      <div>
+                        <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Email</p>
+                        <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}>
+                          {applicationData.guarantorInfo?.personalGurantorEmail || "N/A"}
+                        </p>
                       </div>
                       <div>
-                        {
-                          applicationData?.personalGuarantor ?
-                            <GuarantorInfo data={applicationData.personalGuarantor} type="personal" />
-                            : <Badge variant={"destructive"} className="text-xl">Data not available</Badge>
-                        }
+                        <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Phone</p>
+                        <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}>
+                          {applicationData.guarantorInfo?.personalGurantorphone || "N/A"}
+                        </p>
                       </div>
                     </div>
-
-
-                    {/* Business Guarantor */}
-                    <div className="space-y-4">
-                      <h4 className={`font-medium text-lg ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                        Business Guarantor
-                      </h4>
-                      <div className="space-y-3">
-                        <div>
-                          <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Email</p>
-                          <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                            {applicationData.guarantorInfo.businessGurantorEmail}
-                          </p>
-                        </div>
-                        <div>
-                          <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Phone</p>
-                          <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                            {applicationData.guarantorInfo.businessGurantorPhone}
-                          </p>
-                        </div>
-                      </div>
-                      <div>
-                        {
-                          applicationData?.businessGuarantor ?
-                            <GuarantorInfo data={applicationData.businessGuarantor} type="business" />
-                            : <Badge variant={"destructive"} className="text-xl">Data not available</Badge>
-                        }
-                      </div>
+                    <div>
+                      {
+                        applicationData?.personalGuarantor ?
+                          <GuarantorInfo data={applicationData.personalGuarantor} type="personal" />
+                          : <Badge variant={"destructive"} className="text-xl">Data not available</Badge>
+                      }
                     </div>
                   </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Personal Guarantor */}
-                    <div className="space-y-4">
-                      <h4 className={`font-medium text-lg ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                        Personal Guarantor
-                      </h4>
-                      <div className="space-y-3">
-                        <div>
-                          <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Email</p>
-                          <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                            {applicationData.guarantorInfo}
-                          </p>
-                        </div>
-                        <div>
-                          <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Phone</p>
-                          <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                            {applicationData?.guarantorInfo}
-                          </p>
-                        </div>
+
+                  {/* Business Guarantor */}
+                  <div className="space-y-4">
+                    <h4 className={`font-medium text-lg ${isDarkMode ? "text-white" : "text-gray-900"}`}>
+                      Business Guarantor
+                    </h4>
+                    <div className="space-y-3">
+                      <div>
+                        <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Email</p>
+                        <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}>
+                          {applicationData.guarantorInfo?.businessGurantorEmail || "N/A"}
+                        </p>
                       </div>
                       <div>
-                        {
-                          applicationData?.personalGuarantor ?
-                            <GuarantorInfo data={applicationData.personalGuarantor} type="personal" />
-                            : <Badge variant={"destructive"} className="text-xl">Data not available</Badge>
-                        }
+                        <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Phone</p>
+                        <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}>
+                          {applicationData.guarantorInfo?.businessGurantorPhone || "N/A"}
+                        </p>
                       </div>
                     </div>
-
-
-                    {/* Business Guarantor */}
-                    <div className="space-y-4">
-                      <h4 className={`font-medium text-lg ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                        Business Guarantor
-                      </h4>
-                      <div className="space-y-3">
-                        <div>
-                          <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Email</p>
-                          <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                            {applicationData.guarantorInfo}
-                          </p>
-                        </div>
-                        <div>
-                          <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Phone</p>
-                          <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                            {applicationData.guarantorInfo}
-                          </p>
-                        </div>
-                      </div>
-                      <div>
-                        {
-                          applicationData?.businessGuarantor ?
-                            <GuarantorInfo data={applicationData.businessGuarantor} type="business" />
-                            : <Badge variant={"destructive"} className="text-xl">Data not available</Badge>
-                        }
-                      </div>
+                    <div>
+                      {
+                        applicationData?.businessGuarantor ?
+                          <GuarantorInfo data={applicationData.businessGuarantor} type="business" />
+                          : <Badge variant={"destructive"} className="text-xl">Data not available</Badge>
+                      }
                     </div>
                   </div>
-                )}
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -1039,104 +979,12 @@ export default function DetailsViewApplicationFrom({ applicationData }: { applic
                 <CardDescription>All documents submitted with this loan application</CardDescription>
               </CardHeader>
               <CardContent>
-                {/* Search */}
-                <div className="mb-6">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                    <Input
-                      placeholder="Search documents..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                </div>
-
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Document</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Upload Date</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {applicationData.document
-                      .filter((doc) => doc.originalName.toLowerCase().includes(searchTerm.toLowerCase()))
-                      .map((doc) => (
-                        <TableRow key={doc.id}>
-                          <TableCell>
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
-                                {doc.mimeType.includes("pdf") ? (
-                                  <FileText className="w-4 h-4 text-blue-600" />
-                                ) : (
-                                  <FileImage className="w-4 h-4 text-green-400" />
-                                )}
-                              </div>
-                              <div>
-                                <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                                  {doc.originalName}
-                                </p>
-                                <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                                  {doc.mimeType}
-                                </p>
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="outline">{doc.mimeType}</Badge>
-                          </TableCell>
-                          <TableCell>{formatDate(doc.uploadedAt, "DD-MM-YYYY")}</TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Button variant="outline" size="sm">
-                                    <Eye className="w-4 h-4" />
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="max-w-4xl">
-                                  <DialogHeader>
-                                    <DialogTitle>{doc.originalName}</DialogTitle>
-                                  </DialogHeader>
-                                  <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                                    {doc.mimeType.includes("image") ? (
-                                      <Image
-                                        height={200}
-                                        width={200}
-                                        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${doc.url}`}
-                                        alt={doc.originalName}
-                                        className="max-w-full max-h-full object-contain"
-                                      />
-                                    ) : doc.mimeType.includes("pdf") ? (
-                                      <iframe
-                                        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${doc.url}`}
-                                        className="w-full h-full rounded-lg"
-                                      />
-                                    ) : (
-                                      <p className="text-gray-500">Document preview not available</p>
-                                    )}
-                                  </div>
-                                </DialogContent>
-                              </Dialog>
-                              <Button variant="outline" size="sm" asChild>
-                                <Button variant="outline" size="sm" asChild>
-                                  <a
-                                    href={`${process.env.NEXT_PUBLIC_IMAGE_URL}${doc.url}`} target="_blank"
-                                    download={doc.originalName} // 👈 forces automatic download with original name
-                                  >
-                                    <Download className="w-4 h-4" />
-                                  </a>
-                                </Button>
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
+                <DocumentTable
+                  documents={applicationData.document}
+                  searchTerm={docSearchTerm}
+                  onSearchChange={setDocSearchTerm}
+                  isDarkMode={isDarkMode}
+                />
               </CardContent>
             </Card>
           </TabsContent>
@@ -1283,113 +1131,23 @@ export default function DetailsViewApplicationFrom({ applicationData }: { applic
               </Card>
             </div>
           </TabsContent>
-          {/* Documents Tab */}
+          {/* Additional Documents Tab */}
           <TabsContent value="additionalDoc" className="space-y-6">
             <Card className={isDarkMode ? "bg-gray-800 border-gray-700" : ""}>
               <CardHeader>
                 <CardTitle className={`flex items-center gap-2 ${isDarkMode ? "text-white" : ""}`}>
                   <FileText className="w-5 h-5" />
-                  Uploaded Documents
+                  Additional Documents
                 </CardTitle>
-                <CardDescription>All documents submitted with this loan application</CardDescription>
+                <CardDescription>Additional documents submitted with this loan application</CardDescription>
               </CardHeader>
               <CardContent>
-                {/* Search */}
-                <div className="mb-6">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                    <Input
-                      placeholder="Search documents..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                </div>
-
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Document</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Upload Date</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {applicationData.additionalDocument
-                      .filter((doc) => doc.originalName.toLowerCase().includes(searchTerm.toLowerCase()))
-                      .map((doc) => (
-                        <TableRow key={doc.id}>
-                          <TableCell>
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
-                                {doc.mimeType.includes("pdf") ? (
-                                  <FileText className="w-4 h-4 text-blue-600" />
-                                ) : (
-                                  <FileImage className="w-4 h-4 text-blue-600" />
-                                )}
-                              </div>
-                              <div>
-                                <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-                                  {doc.originalName}
-                                </p>
-                                <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                                  {doc.mimeType}
-                                </p>
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="outline">{doc.mimeType}</Badge>
-                          </TableCell>
-                          <TableCell>{formatDate(doc.uploadedAt, "DD-MM-YYYY")}</TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Button variant="outline" size="sm">
-                                    <Eye className="w-4 h-4" />
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="max-w-4xl">
-                                  <DialogHeader>
-                                    <DialogTitle>{doc.originalName}</DialogTitle>
-                                  </DialogHeader>
-                                  <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                                    {doc.mimeType.includes("image") ? (
-                                      <Image
-                                        height={200}
-                                        width={200}
-                                        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${doc.url}`}
-                                        alt={doc.originalName}
-                                        className="max-w-full max-h-full object-contain"
-                                      />
-                                    ) : doc.mimeType.includes("pdf") ? (
-                                      <iframe
-                                        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${doc.url}`}
-                                        className="w-full h-full rounded-lg"
-                                      />
-                                    ) : (
-                                      <p className="text-gray-500">Document preview not available</p>
-                                    )}
-                                  </div>
-                                </DialogContent>
-                              </Dialog>
-                              <Button variant="outline" size="sm" asChild>
-                                <a
-                                  href={`${process.env.NEXT_PUBLIC_IMAGE_URL}${doc.url}`} target="_blank"
-                                  download={doc.originalName} // 👈 forces automatic download with original name
-                                >
-                                  <Download className="w-4 h-4" />
-                                </a>
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
+                <DocumentTable
+                  documents={applicationData.additionalDocument}
+                  searchTerm={additionalDocSearchTerm}
+                  onSearchChange={setAdditionalDocSearchTerm}
+                  isDarkMode={isDarkMode}
+                />
               </CardContent>
             </Card>
           </TabsContent>

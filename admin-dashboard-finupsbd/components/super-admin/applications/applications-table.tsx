@@ -36,7 +36,7 @@ export function ApplicationsTable() {
     status: status === "ALL" ? undefined : status,
   }), [currentPage, searchTerm, module, status]);
 
-  const { data, isLoading, isFetching, error } = useApplications(queryFilters);
+  const { data, error } = useApplications(queryFilters);
 
   const rows = useMemo(() => data?.data?.data ?? [], [data]);
   const pagination = useMemo(() => data?.data?.pagination, [data]);
@@ -80,13 +80,13 @@ export function ApplicationsTable() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Application ID</TableHead>
+              <TableHead className="min-w-[140px]">Application ID</TableHead>
               <TableHead>Applicant</TableHead>
-              <TableHead>Product</TableHead>
-              <TableHead>Bank</TableHead>
-              <TableHead>Eligible Amount</TableHead>
+              <TableHead className="hidden md:table-cell">Product</TableHead>
+              <TableHead className="hidden lg:table-cell">Bank</TableHead>
+              <TableHead className="hidden md:table-cell">Eligible Amount</TableHead>
               <TableHead>Requested Amount</TableHead>
-              <TableHead>Date</TableHead>
+              <TableHead className="hidden lg:table-cell">Date</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -95,13 +95,13 @@ export function ApplicationsTable() {
             {rows.length > 0 ? (
               rows.map((application) => (
                 <TableRow key={application.id}>
-                  <TableCell className="font-medium">{application.applicationId}</TableCell>
+                  <TableCell className="font-medium min-w-[140px]">{application.applicationId}</TableCell>
                   <TableCell>{application.user?.name}</TableCell>
-                  <TableCell>{formatEnums(application.eligibleLoanOffer?.loanType)}</TableCell>
-                  <TableCell>{application.eligibleLoanOffer?.bankName?.split(",")[0]}</TableCell>
-                  <TableCell>{formatToBDTCurrency(application.eligibleLoanOffer?.eligibleLoan)}</TableCell>
+                  <TableCell className="hidden md:table-cell">{formatEnums(application.eligibleLoanOffer?.loanType)}</TableCell>
+                  <TableCell className="hidden lg:table-cell">{application.eligibleLoanOffer?.bankName?.split(",")[0]}</TableCell>
+                  <TableCell className="hidden md:table-cell">{formatToBDTCurrency(application.eligibleLoanOffer?.eligibleLoan)}</TableCell>
                   <TableCell>{formatToBDTCurrency(application.loanRequest?.loanAmount)}</TableCell>
-                  <TableCell>{formatDate(application.createdAt, "MM/DD/YYYY h:mm A")}</TableCell>
+                  <TableCell className="hidden lg:table-cell">{formatDate(application.createdAt, "MM/DD/YYYY h:mm A")}</TableCell>
                   <TableCell>
                     <StatusBadge status={application.status} />
                   </TableCell>

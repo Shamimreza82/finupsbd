@@ -22,53 +22,70 @@ export function PaginationComponent({
 }: Props) {
   if (!totalPages || totalPages <= 1) return null
 
-  const getPageNumbers = () => {
+  const getPageNumbers = (compact: boolean) => {
     const pages: (number | "...")[] = []
+    const range = compact ? 1 : 2
 
-    if (currentPage > 3) pages.push(1)
-    if (currentPage > 4) pages.push("...")
+    if (currentPage > range + 2) pages.push(1)
+    if (currentPage > range + 3) pages.push("...")
 
-    for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+    for (let i = currentPage - range; i <= currentPage + range; i++) {
       if (i > 0 && i <= totalPages) pages.push(i)
     }
 
-    if (currentPage < totalPages - 3) pages.push("...")
-    if (currentPage < totalPages - 2) pages.push(totalPages)
+    if (currentPage < totalPages - (range + 2)) pages.push("...")
+    if (currentPage < totalPages - (range + 1)) pages.push(totalPages)
 
     return pages
   }
 
-  const pages = getPageNumbers()
+  const desktopPages = getPageNumbers(false)
+  const mobilePages = getPageNumbers(true)
 
   return (
     <Pagination className="w-full">
-      {/* Align pagination to the RIGHT */}
       <PaginationContent className="justify-end w-full">
-
-        {/* Previous */}
         <PaginationItem>
           <PaginationPrevious
             onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
           />
         </PaginationItem>
 
-        {/* Numbers */}
-        {pages.map((page, index) => (
-          <PaginationItem key={index}>
-            {page === "..." ? (
-              <span className="px-3 py-2 text-gray-500">...</span>
-            ) : (
-              <PaginationLink
-                isActive={currentPage === page}
-                onClick={() => onPageChange(page as number)}
-              >
-                {page}
-              </PaginationLink>
-            )}
-          </PaginationItem>
-        ))}
+        <span className="flex sm:hidden">
+          {mobilePages.map((page, index) => (
+            <PaginationItem key={index}>
+              {page === "..." ? (
+                <span className="px-1.5 py-2 text-gray-500">...</span>
+              ) : (
+                <PaginationLink
+                  size="sm"
+                  isActive={currentPage === page}
+                  onClick={() => onPageChange(page as number)}
+                >
+                  {page}
+                </PaginationLink>
+              )}
+            </PaginationItem>
+          ))}
+        </span>
 
-        {/* Next */}
+        <span className="hidden sm:flex">
+          {desktopPages.map((page, index) => (
+            <PaginationItem key={index}>
+              {page === "..." ? (
+                <span className="px-3 py-2 text-gray-500">...</span>
+              ) : (
+                <PaginationLink
+                  isActive={currentPage === page}
+                  onClick={() => onPageChange(page as number)}
+                >
+                  {page}
+                </PaginationLink>
+              )}
+            </PaginationItem>
+          ))}
+        </span>
+
         <PaginationItem>
           <PaginationNext
             onClick={() =>
@@ -76,7 +93,6 @@ export function PaginationComponent({
             }
           />
         </PaginationItem>
-
       </PaginationContent>
     </Pagination>
   )

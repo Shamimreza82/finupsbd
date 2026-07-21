@@ -54,7 +54,7 @@ export function ApplicationsFilter({
         />
       </div>
 
-      <div className="flex flex-col gap-4 md:flex-row">
+      <div className="flex flex-col sm:flex-row gap-4">
         <Select
           value={productType}
           onValueChange={(value) => {
@@ -62,7 +62,7 @@ export function ApplicationsFilter({
             onFilterChange({ searchTerm, productType: value, status });
           }}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="Product Type" />
           </SelectTrigger>
           <SelectContent>
@@ -82,7 +82,7 @@ export function ApplicationsFilter({
             onFilterChange({ searchTerm, productType, status: value });
           }}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
