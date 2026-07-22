@@ -145,27 +145,25 @@ export default function UserProfile() {
   ];
 
   return (
-    <Card className="relative mx-auto w-full border-muted/30 shadow-sm rounded-xl">
+    <Card className="relative mx-auto w-full border-muted/30 shadow-sm rounded-xl animate-in fade-in duration-500">
       <CardHeader className="relative rounded-t-xl pb-4">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-          <div className="flex flex-col sm:flex-row sm:gap-4 gap-2 items-center sm:items-start">
-            <Avatar className="h-24 w-24 border-2 border-primary/20 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:gap-4 gap-3 items-center sm:items-start">
+            <Avatar className="h-20 w-20 sm:h-24 sm:w-24 ring-2 ring-primary/20 ring-offset-2 ring-offset-background shadow-sm">
               <AvatarImage
-                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${user?.profile?.avatar}` || ""}
+                src={user?.profile?.avatar ? `${process.env.NEXT_PUBLIC_IMAGE_URL}${user.profile.avatar}` : ""}
                 alt="Profile picture"
               />
-              <AvatarFallback className="bg-primary/10 text-2xl font-semibold text-primary">
+              <AvatarFallback className="bg-primary/10 text-xl sm:text-2xl font-semibold text-primary">
                 {user?.name
                   ?.split(" ")
                   .map((n: string) => n[0])
                   .join("") || "U"}
               </AvatarFallback>
             </Avatar>
-            <div className="text-center sm:text-left">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
-                <h2 className="text-xl font-semibold truncate">{user?.name}</h2>
-              </div>
-              <p className="text-sm text-muted-foreground break-all">
+            <div className="text-center sm:text-left min-w-0">
+              <h2 className="text-xl font-semibold truncate">{user?.name}</h2>
+              <p className="text-sm text-muted-foreground truncate">
                 {user?.email}
               </p>
               <p className="mt-1 text-xs text-muted-foreground">
@@ -177,8 +175,8 @@ export default function UserProfile() {
               </p>
             </div>
           </div>
-          <div className="flex flex-col gap-2 sm:items-end items-start w-full sm:w-auto">
-            <Link href="/user/update-profile" className="w-full sm:w-auto">
+          <div className="flex sm:flex-col gap-2 sm:items-end items-stretch sm:w-auto">
+            <Link href="/user/update-profile">
               <Button
                 variant="outline"
                 size="sm"
@@ -212,20 +210,20 @@ export default function UserProfile() {
 
       <Separator />
 
-      <CardContent className="pt-6 space-y-6">
+      <CardContent className="pt-6 space-y-0">
         {profileFields.map((field) => (
           <div
             key={field.label}
-            className="group flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 pb-3 border-b border-muted/20 last:border-b-0"
+            className="group flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 py-3.5 border-b border-muted/20 last:border-b-0 transition-colors hover:bg-muted/20 -mx-6 px-6"
           >
-            <div className="flex items-center gap-2">
-              <field.icon className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium">{field.label}</span>
+            <div className="flex items-center gap-2 min-w-0">
+              <field.icon className="h-4 w-4 shrink-0 text-primary" />
+              <span className="text-sm font-medium truncate">{field.label}</span>
               {field.verified && (
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Shield className="h-3 w-3 text-green-500" />
+                      <Shield className="h-3 w-3 shrink-0 text-green-500" />
                     </TooltipTrigger>
                     <TooltipContent>
                       <p className="text-xs">Verified</p>
@@ -249,15 +247,15 @@ export default function UserProfile() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-6 w-6 !text-primary"
+                        className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
                         onClick={() =>
                           copyToClipboard(field.value as string, field.label)
                         }
                       >
                         {copiedField === field.label ? (
-                          <Check className="h-3 w-3 text-green-600" />
+                          <Check className="h-3.5 w-3.5 text-green-500" />
                         ) : (
-                          <Copy className="h-3 w-3 text-green-600" />
+                          <Copy className="h-3.5 w-3.5 text-muted-foreground hover:text-primary transition-colors" />
                         )}
                       </Button>
                     </TooltipTrigger>
@@ -276,11 +274,9 @@ export default function UserProfile() {
         ))}
       </CardContent>
 
-      <CardFooter className="flex flex-col sm:flex-row sm:justify-between gap-2 border-t pt-4 text-xs text-muted-foreground">
-        <span className="text-sm">
-          Last updated: {new Date().toLocaleDateString()}
-        </span>
-        <Button variant="link" size="sm" className="p-0 text-sm">
+      <CardFooter className="flex flex-col sm:flex-row sm:justify-between items-center gap-2 border-t pt-4 text-xs text-muted-foreground">
+        <span>Last updated: {new Date().toLocaleDateString()}</span>
+        <Button variant="link" size="sm" className="p-0 text-xs h-auto">
           Request Data Update
         </Button>
       </CardFooter>

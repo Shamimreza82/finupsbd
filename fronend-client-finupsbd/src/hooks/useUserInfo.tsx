@@ -10,8 +10,10 @@ export function useUserInfo() {
     const fetchUserData = async () => {
       try {
         setIsLoading(true);
-        const { data } = await userInfo();
-        setUser(data);
+        const response = await userInfo();
+        if (!response) throw new Error("Empty response from server");
+        const { data } = response;
+        setUser(data ?? null);
       } catch (err) {
         setError("Failed to load user profile");
         console.error(err);

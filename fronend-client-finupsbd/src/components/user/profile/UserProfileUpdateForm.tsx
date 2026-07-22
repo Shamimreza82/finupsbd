@@ -27,11 +27,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from "@/components/ui/card";
 import { updateUserProfile } from "@/services/UserData";
 import { useUserInfo } from "@/hooks/useUserInfo";
 import { userProfileSchema } from "./userProfileValidation";
 import { useRouter } from "next/navigation";
 import ProfileSkeleton from "@/components/loading/ProfileSkeleton";
+import { Camera, X, ArrowLeft } from "lucide-react";
 
 type UserProfileFormValues = z.infer<typeof userProfileSchema>;
 
@@ -87,11 +93,12 @@ export default function UserProfileUpdateForm() {
         formData.append("file", image[0]);
       }
       const response = await updateUserProfile(formData);
-      if (!response.success) throw new Error("Failed to update profile");
+      if (!response.success) throw new Error(response.message || "Failed to update profile");
       toast.success("Profile updated successfully");
       router.push("/user/profile");
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      const message = error instanceof Error ? error.message : "Something went wrong. Please try again.";
+      toast.error(message);
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -113,160 +120,175 @@ export default function UserProfileUpdateForm() {
     return <ProfileSkeleton />;
   }
 
-
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-md transition-all duration-300">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div className="relative">
-          <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-100 border border-gray-300 relative">
-            {profileImage ? (
-              <Image
-                src={ profileImage?.startsWith("data:") ? profileImage : `${process.env.NEXT_PUBLIC_IMAGE_URL}${profileImage}`
-                }
-                alt="Profile"
-                width={120}
-                height={120}
-                className="w-full h-full object-cover"
+    <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in duration-500">
+      <Button variant="ghost" size="sm" onClick={() => router.back()} className="gap-2 -ml-2">
+        <ArrowLeft className="h-4 w-4" />
+        Back
+      </Button>
+
+      <Card className="border-muted/30 shadow-sm rounded-xl">
+        <CardHeader className="pb-0">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex items-center gap-4">
+              <div className="relative shrink-0">
+                <div className="h-20 w-20 rounded-full overflow-hidden ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
+                  {profileImage ? (
+                    <Image
+                      src={profileImage?.startsWith("data:") ? profileImage : `${process.env.NEXT_PUBLIC_IMAGE_URL}${profileImage}`}
+                      alt="Profile"
+                      width={120}
+                      height={120}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-muted flex items-center justify-center">
+                      <Camera className="h-6 w-6 text-muted-foreground" />
+                    </div>
+                  )}
+                </div>
+                {profileImage && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setProfileImage(null);
+                      setImage(null);
+                    }}
+                    className="absolute -top-1 -right-1 bg-background border border-border rounded-full p-1 shadow-sm hover:bg-muted transition-colors"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                )}
+              </div>
+              <div>
+                <p className="text-sm font-medium">Profile Photo</p>
+                <p className="text-xs text-muted-foreground">PNG or JPEG (max 5MB)</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 w-full md:w-auto">
+              <input
+                id="profile-upload"
+                type="file"
+                accept="image/png, image/jpeg"
+                className="hidden"
+                onChange={handleImageChange}
+                aria-label="Upload profile image"
               />
-            ) : (
-              <Image src="/placeholder.svg" alt="Profile" width={120} height={120} className="w-full h-full object-cover" />
-            )}
-            {profileImage && (
-              <button
-                type="button"
-                onClick={() => {
-                  setProfileImage(null);
-                  setImage(null);
-                }}
-                className="absolute top-0 right-0 bg-white rounded-full p-1 text-xs"
+              <label
+                htmlFor="profile-upload"
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-lg shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring cursor-pointer transition-colors"
               >
-                ✖
-              </button>
-            )}
+                <Camera className="h-4 w-4" />
+                Change Photo
+              </label>
+              <Link href="/user/setting/update-email-mobile">
+                <Button variant="outline" size="sm">
+                  Update Email / Phone
+                </Button>
+              </Link>
+            </div>
           </div>
-          <div className="mt-4">
-            <input
-              id="profile-upload"
-              type="file"
-              accept="image/png, image/jpeg"
-              className="hidden"
-              onChange={handleImageChange}
-              aria-label="Upload profile image"
-            />
-            <label
-              htmlFor="profile-upload"
-              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-primary rounded-md shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary cursor-pointer transition"
-            >
-              📸 Change Profile Photo
-            </label>
-          </div>
-        </div>
+        </CardHeader>
 
-        <div className="w-full md:w-auto">
-          <Link href="/user/setting/update-email-mobile">
-            <Button variant="outline" className="w-full md:w-auto">
-              Update Email / Phone Number
-            </Button>
-          </Link>
-        </div>
-      </div>
+        <CardContent className="pt-6">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField name="nameAsNid" control={form.control} render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name <span className="text-destructive">*</span></FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Enter full name as per NID" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField name="nameAsNid" control={form.control} render={({ field }) => (
-              <FormItem>
-                <FormLabel>Full Name <span className="text-red-500">*</span></FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="Enter full name as per NID" className="rounded-lg shadow-sm" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
+                <FormField name="nationalIdNumber" control={form.control} render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>NID Number <span className="text-destructive">*</span></FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Enter your NID number" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
 
-            <FormField name="nationalIdNumber" control={form.control} render={({ field }) => (
-              <FormItem>
-                <FormLabel>NID Number <span className="text-red-500">*</span></FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="Enter your NID number" className="rounded-lg shadow-sm" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
+                <FormField name="gender" control={form.control} render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Gender <span className="text-destructive">*</span></FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="MALE">Male</SelectItem>
+                        <SelectItem value="FEMALE">Female</SelectItem>
+                        <SelectItem value="OTHER">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )} />
 
-            <FormField name="gender" control={form.control} render={({ field }) => (
-              <FormItem>
-                <FormLabel>Gender <span className="text-red-500">*</span></FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
+                <FormField name="dateOfBirth" control={form.control} render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Date of Birth <span className="text-destructive">*</span></FormLabel>
+                    <FormControl>
+                      <Input
+                        type="date"
+                        value={field.value ? format(field.value, "yyyy-MM-dd") : ""}
+                        onChange={(e) => field.onChange(new Date(e.target.value))}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+              </div>
+
+              <FormField name="address" control={form.control} render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
                   <FormControl>
-                    <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                    <Textarea {...field} placeholder="Enter your address" className="min-h-[100px]" />
                   </FormControl>
-                  <SelectContent>
-                    <SelectItem value="MALE">Male</SelectItem>
-                    <SelectItem value="FEMALE">Female</SelectItem>
-                    <SelectItem value="OTHER">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )} />
+                  <FormMessage />
+                </FormItem>
+              )} />
 
-            <FormField name="dateOfBirth" control={form.control} render={({ field }) => (
-              <FormItem>
-                <FormLabel>Date of Birth <span className="text-red-500">*</span></FormLabel>
-                <FormControl>
-                  <Input
-                    type="date"
-                    value={field.value ? format(field.value, "yyyy-MM-dd") : ""}
-                    onChange={(e) => field.onChange(new Date(e.target.value))}
-                    className="rounded-lg shadow-sm"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-          </div>
+              <FormField name="city" control={form.control} render={({ field }) => (
+                <FormItem className="max-w-xs">
+                  <FormLabel>City <span className="text-destructive">*</span></FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="dhaka">Dhaka</SelectItem>
+                      <SelectItem value="gazipur">Gazipur</SelectItem>
+                      <SelectItem value="chittagong">Chittagong</SelectItem>
+                      <SelectItem value="khulna">Khulna</SelectItem>
+                      <SelectItem value="rajshahi">Rajshahi</SelectItem>
+                      <SelectItem value="sylhet">Sylhet</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )} />
 
-          <FormField name="address" control={form.control} render={({ field }) => (
-            <FormItem>
-              <FormLabel>Address</FormLabel>
-              <FormControl>
-                <Textarea {...field} placeholder="Enter your address" className="rounded-lg min-h-[100px] shadow-sm" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )} />
-
-          <FormField name="city" control={form.control} render={({ field }) => (
-            <FormItem className="max-w-xs">
-              <FormLabel>City <span className="text-red-500">*</span></FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
-                <FormControl>
-                  <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="dhaka">Dhaka</SelectItem>
-                  <SelectItem value="gazipur">Gazipur</SelectItem>
-                  <SelectItem value="chittagong">Chittagong</SelectItem>
-                  <SelectItem value="khulna">Khulna</SelectItem>
-                  <SelectItem value="rajshahi">Rajshahi</SelectItem>
-                  <SelectItem value="sylhet">Sylhet</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )} />
-
-          <div className="flex justify-end gap-3 pt-4">
-            <Button type="button" variant="outline" onClick={() => form.reset()}>
-              Cancel
-            </Button>
-            <Button type="submit" className="bg-green-600 hover:bg-green-700" disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save Changes"}
-            </Button>
-          </div>
-        </form>
-      </Form>
+              <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4 border-t">
+                <Button type="button" variant="outline" onClick={() => router.back()}>
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? "Saving..." : "Save Changes"}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

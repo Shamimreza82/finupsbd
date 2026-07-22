@@ -21,17 +21,14 @@ export default function UserLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname(); // e.g. "/dashboard/loans/applications"
+  const pathname = usePathname();
   const segments = pathname.split("/").filter((seg) => seg !== "");
-
-
-
 
   const breadcrumbItems = segments.map((segment, index) => {
     const href = "/" + segments.slice(0, index + 1).join("/");
 
     const isLast = index === segments.length - 1;
-    const formatted = segment.replace(/-/g, " ") // convert kebab-case to words .replace(/\b\w/g, (c) => c.toUpperCase()); // capitalize words
+    const formatted = segment.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
     return (
       <React.Fragment key={href}>
@@ -48,8 +45,6 @@ export default function UserLayout({
       </React.Fragment>
     );
   });
-
-
 
   return (
     <div>

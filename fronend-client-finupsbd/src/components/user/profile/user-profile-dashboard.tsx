@@ -73,59 +73,59 @@ export default function DetailsViewUserProfile({ user }: UserProfileDashboardPro
   return (
     <div className="max-w-5xl mx-auto">
       {/* Profile Header */}
-      <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg p-6 mb-6 shadow-sm">
+      <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-6 mb-6 shadow-sm border border-primary/10">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-          <Avatar className="h-24 w-24 border-4 border-background shadow-md">
-            <AvatarImage src={user.profile?.avatar} alt="profile image" />
-            <AvatarFallback className="text-2xl bg-primary text-primary-foreground">
-              {/* {getInitials(user.name)} */} image
+          <Avatar className="h-20 w-20 md:h-24 md:w-24 ring-2 ring-primary/20 ring-offset-2 ring-offset-background shadow-md">
+            <AvatarImage src={user.profile?.avatar ? `${process.env.NEXT_PUBLIC_IMAGE_URL}${user.profile.avatar}` : ""} alt="profile image" />
+            <AvatarFallback className="text-xl md:text-2xl bg-primary text-primary-foreground">
+              {user.name?.split(" ").map(n => n[0]).join("").slice(0, 2) || "U"}
             </AvatarFallback>
           </Avatar>
 
-          <div className="flex-1 text-center md:text-left">
+          <div className="flex-1 text-center md:text-left min-w-0">
             <div className="flex flex-col md:flex-row md:items-center gap-2 mb-2">
-              <h2 className="text-2xl font-bold">{user.name}</h2>
-              <Badge className="md:ml-2 self-center" variant={user.isActive ? "default" : "destructive"}>
+              <h2 className="text-xl md:text-2xl font-bold truncate">{user.name}</h2>
+              <Badge className="self-center md:ml-2 w-fit" variant={user.isActive ? "default" : "destructive"}>
                 {user.isActive ? "Active" : "Inactive"}
               </Badge>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-4 text-sm text-muted-foreground">
-              <div className="flex items-center justify-center md:justify-start">
-                <Mail className="h-4 w-4 mr-1" />
-                <span>{user.email}</span>
+            <div className="flex flex-col sm:flex-row flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
+              <div className="flex items-center justify-center md:justify-start gap-1.5">
+                <Mail className="h-4 w-4 shrink-0" />
+                <span className="truncate">{user.email}</span>
               </div>
-              <div className="flex items-center justify-center md:justify-start">
-                <Phone className="h-4 w-4 mr-1" />
+              <div className="flex items-center justify-center md:justify-start gap-1.5">
+                <Phone className="h-4 w-4 shrink-0" />
                 <span>{user.phone}</span>
               </div>
-              <div className="flex items-center justify-center md:justify-start">
-                <Shield className="h-4 w-4 mr-1" />
+              <div className="flex items-center justify-center md:justify-start gap-1.5">
+                <Shield className="h-4 w-4 shrink-0" />
                 <span>{user.role}</span>
               </div>
             </div>
 
             <div className="mt-4 flex flex-wrap justify-center md:justify-start gap-2">
-              <Button size="sm" className="gap-1">
+              <Button size="sm" className="gap-1.5">
                 <Edit className="h-4 w-4" />
                 Edit Profile
               </Button>
-              <Button size="sm" variant="outline" className="gap-1">
+              <Button size="sm" variant="outline" className="gap-1.5">
                 <Key className="h-4 w-4" />
                 Change Password
               </Button>
-              <Button size="sm" variant="outline" className="gap-1">
+              <Button size="sm" variant="outline" className="gap-1.5">
                 <LogOut className="h-4 w-4" />
                 Sign Out
               </Button>
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex md:flex-col items-center gap-4 md:gap-2 justify-center">
             <div className="text-center">
-              <div className="text-sm text-muted-foreground">User ID</div>
-              <div className="flex items-center gap-1 mt-1">
-                <span className="font-mono font-medium">{user.userId}</span>
+              <div className="text-xs text-muted-foreground">User ID</div>
+              <div className="flex items-center gap-1 mt-0.5">
+                <span className="font-mono text-sm font-medium">{user.userId}</span>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -138,30 +138,30 @@ export default function DetailsViewUserProfile({ user }: UserProfileDashboardPro
             </div>
 
             <div className="text-center">
-              <div className="text-sm text-muted-foreground">Account Age</div>
-              <div className="font-medium mt-1">{calculateAccountAge()} days</div>
+              <div className="text-xs text-muted-foreground">Account Age</div>
+              <div className="text-sm font-medium mt-0.5">{calculateAccountAge()} days</div>
             </div>
           </div>
         </div>
       </div>
 
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid grid-cols-4 w-full mb-6">
-          <TabsTrigger value="overview" className="flex items-center gap-1">
-            <UserCircle className="h-4 w-4" />
-            <span>Overview</span>
+        <TabsList className="grid w-full mb-6 grid-cols-2 sm:grid-cols-4">
+          <TabsTrigger value="overview" className="flex items-center gap-1.5">
+            <UserCircle className="h-4 w-4 shrink-0" />
+            <span className="text-xs sm:text-sm">Overview</span>
           </TabsTrigger>
-          <TabsTrigger value="security" className="flex items-center gap-1">
-            <Lock className="h-4 w-4" />
-            <span>Security</span>
+          <TabsTrigger value="security" className="flex items-center gap-1.5">
+            <Lock className="h-4 w-4 shrink-0" />
+            <span className="text-xs sm:text-sm">Security</span>
           </TabsTrigger>
-          <TabsTrigger value="activity" className="flex items-center gap-1">
-            <Activity className="h-4 w-4" />
-            <span>Activity</span>
+          <TabsTrigger value="activity" className="flex items-center gap-1.5">
+            <Activity className="h-4 w-4 shrink-0" />
+            <span className="text-xs sm:text-sm">Activity</span>
           </TabsTrigger>
-          <TabsTrigger value="settings" className="flex items-center gap-1">
-            <Bell className="h-4 w-4" />
-            <span>Notifications</span>
+          <TabsTrigger value="settings" className="flex items-center gap-1.5">
+            <Bell className="h-4 w-4 shrink-0" />
+            <span className="text-xs sm:text-sm">Notifications</span>
           </TabsTrigger>
         </TabsList>
 
@@ -195,7 +195,7 @@ export default function DetailsViewUserProfile({ user }: UserProfileDashboardPro
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Role</span>
-                  <Badge variant="outline" className="font-normal">
+                  <Badge variant="secondary" className="font-normal">
                     {user.role}
                   </Badge>
                 </div>
@@ -370,12 +370,12 @@ export default function DetailsViewUserProfile({ user }: UserProfileDashboardPro
                     </Badge>
                   </div>
                   {!user.emailVerified && (
-                    <div className="flex items-center gap-2 p-3 bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-md">
-                      <AlertCircle className="h-4 w-4 flex-shrink-0" />
-                      <div className="text-sm">
+                    <div className="flex items-center gap-2 p-3 bg-warning/10 border border-warning/30 text-warning rounded-md">
+                      <AlertCircle className="h-4 w-4 shrink-0" />
+                      <div className="text-sm flex-1">
                         Your email is not verified. Please verify your email to secure your account.
                       </div>
-                      <Button size="sm" variant="outline" className="flex-shrink-0 bg-white">
+                      <Button size="sm" variant="outline" className="shrink-0">
                         Verify
                       </Button>
                     </div>
@@ -391,48 +391,48 @@ export default function DetailsViewUserProfile({ user }: UserProfileDashboardPro
               </CardHeader>
               <CardContent className="space-y-4">
                 {!user.emailVerified && (
-                  <div className="flex gap-3 p-3 border border-red-200 bg-red-50 rounded-md">
+                  <div className="flex gap-3 p-3 border border-destructive/30 bg-destructive/10 rounded-md">
                     <div className="mt-0.5">
-                      <AlertCircle className="h-5 w-5 text-red-500" />
+                      <AlertCircle className="h-5 w-5 text-destructive" />
                     </div>
                     <div>
-                      <h4 className="font-medium text-red-800">Verify your email address</h4>
-                      <p className="text-sm text-red-700 mt-1">
+                      <h4 className="font-medium text-destructive">Verify your email address</h4>
+                      <p className="text-sm text-destructive/80 mt-1">
                         Email verification helps secure your account and enables account recovery.
                       </p>
-                      <Button size="sm" className="mt-2 bg-red-600 hover:bg-red-700">
+                      <Button size="sm" variant="destructive" className="mt-2">
                         Verify Email
                       </Button>
                     </div>
                   </div>
                 )}
 
-                <div className="flex gap-3 p-3 border border-yellow-200 bg-yellow-50 rounded-md">
+                <div className="flex gap-3 p-3 border border-amber-500/30 bg-amber-50 dark:bg-amber-950/30 rounded-md">
                   <div className="mt-0.5">
-                    <AlertCircle className="h-5 w-5 text-yellow-500" />
+                    <AlertCircle className="h-5 w-5 text-amber-500" />
                   </div>
                   <div>
-                    <h4 className="font-medium text-yellow-800">Enable two-factor authentication</h4>
-                    <p className="text-sm text-yellow-700 mt-1">
+                    <h4 className="font-medium text-amber-700 dark:text-amber-400">Enable two-factor authentication</h4>
+                    <p className="text-sm text-amber-600 dark:text-amber-300 mt-1">
                       Add an extra layer of security to your account with 2FA.
                     </p>
                     <Button
                       size="sm"
                       variant="outline"
-                      className="mt-2 bg-white border-yellow-300 text-yellow-800 hover:bg-yellow-100"
+                      className="mt-2 border-amber-300 text-amber-700 dark:text-amber-300 dark:border-amber-700 hover:bg-amber-100 dark:hover:bg-amber-950/50"
                     >
                       Enable 2FA
                     </Button>
                   </div>
                 </div>
 
-                <div className="flex gap-3 p-3 border border-green-200 bg-green-50 rounded-md">
+                <div className="flex gap-3 p-3 border border-green-500/30 bg-green-50 dark:bg-green-950/30 rounded-md">
                   <div className="mt-0.5">
                     <CheckCheck className="h-5 w-5 text-green-500" />
                   </div>
                   <div>
-                    <h4 className="font-medium text-green-800">Password strength: Good</h4>
-                    <p className="text-sm text-green-700 mt-1">
+                    <h4 className="font-medium text-green-700 dark:text-green-400">Password strength: Good</h4>
+                    <p className="text-sm text-green-600 dark:text-green-300 mt-1">
                       Your password appears to be strong. Remember to change it periodically.
                     </p>
                   </div>
@@ -463,7 +463,7 @@ export default function DetailsViewUserProfile({ user }: UserProfileDashboardPro
                       <div className="text-sm text-muted-foreground">{formatDate(user.lastLogin)}</div>
                     </div>
                   </div>
-                  <Badge className="bg-green-100 text-green-800 border-green-200">Active</Badge>
+                  <Badge className="bg-primary/10 text-primary border-primary/20">Active</Badge>
                 </div>
 
                 <div className="flex items-center justify-between p-3 rounded-md">
@@ -478,7 +478,7 @@ export default function DetailsViewUserProfile({ user }: UserProfileDashboardPro
                       </div>
                     </div>
                   </div>
-                  <Badge variant="outline" className="bg-muted text-muted-foreground">
+                  <Badge variant="outline">
                     Ended
                   </Badge>
                 </div>
@@ -565,27 +565,27 @@ export default function DetailsViewUserProfile({ user }: UserProfileDashboardPro
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between py-3 border-b">
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <div className="font-medium">Security Alerts</div>
                     <div className="text-sm text-muted-foreground">Get notified about security-related events</div>
                   </div>
-                  <div className="flex gap-3">
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  <div className="flex gap-2 shrink-0">
+                    <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
                       Email
                     </Badge>
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
                       SMS
                     </Badge>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between py-3 border-b">
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <div className="font-medium">Account Updates</div>
                     <div className="text-sm text-muted-foreground">Notifications about changes to your account</div>
                   </div>
-                  <div className="flex gap-3">
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  <div className="flex gap-2 shrink-0">
+                    <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
                       Email
                     </Badge>
                     <Badge variant="outline" className="bg-muted text-muted-foreground">
@@ -595,11 +595,11 @@ export default function DetailsViewUserProfile({ user }: UserProfileDashboardPro
                 </div>
 
                 <div className="flex items-center justify-between py-3 border-b">
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <div className="font-medium">Marketing & Promotions</div>
                     <div className="text-sm text-muted-foreground">Receive updates about new features and offers</div>
                   </div>
-                  <div className="flex gap-3">
+                  <div className="flex gap-2 shrink-0">
                     <Badge variant="outline" className="bg-muted text-muted-foreground">
                       Email
                     </Badge>
@@ -610,14 +610,14 @@ export default function DetailsViewUserProfile({ user }: UserProfileDashboardPro
                 </div>
 
                 <div className="flex items-center justify-between py-3">
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <div className="font-medium">System Notifications</div>
                     <div className="text-sm text-muted-foreground">
                       Important system updates and maintenance notices
                     </div>
                   </div>
-                  <div className="flex gap-3">
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  <div className="flex gap-2 shrink-0">
+                    <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
                       Email
                     </Badge>
                     <Badge variant="outline" className="bg-muted text-muted-foreground">

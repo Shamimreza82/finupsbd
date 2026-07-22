@@ -108,6 +108,7 @@ const login = async (payload: { identifier: string; password: string }) => {
       },
     });
     console.log('✅ Phone verified updated successfully OLD USER');
+    user.phoneVerified = true;
   }
 
   /////////////////////////////////// TEMP CODE /////////////////////////////////////-------------------------
