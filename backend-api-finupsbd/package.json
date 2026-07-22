@@ -11,7 +11,8 @@
     "format": "npx prettier . --write",
     "postinstall": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
-    "prisma:deploy": "prisma db push"
+    "prisma:deploy": "prisma db push",
+    "seed": "ts-node --transpile-only src/seed.ts"
   },
   "keywords": [],
   "author": "",

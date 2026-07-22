@@ -4,7 +4,6 @@ import cookieParser from 'cookie-parser';
 import globalErrorHandler from './app/middleware/globalErrorHandler';
 import notFound from './app/middleware/notFound';
 import { RootRouter } from './app/rootRouter';
-import seedSuperAdmin from './app/DB';
 import path from 'path';
 import { runCriticalChecks } from './lib/runCriticalChecks';
 import { limiter } from './lib/rateLimit/globalRateLimit';
@@ -21,9 +20,7 @@ app.use(cookieParser());
 app.use(express.json({ limit: '60mb' }));
 app.use(express.urlencoded({ limit: '30mb', extended: true }));
 
-// Note: Automatic seeding on every start is disabled.
 runCriticalChecks();
-seedSuperAdmin();
 
 // Rate limiting: Allow 100 requests per 15 minutes from a single IP
 app.use(limiter);
