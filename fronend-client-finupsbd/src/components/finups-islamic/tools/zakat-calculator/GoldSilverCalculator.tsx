@@ -38,17 +38,17 @@ export default function GoldAndSilverCalculator() {
 
   const loadPrices = async () => {
     try {
-      const goldResult = localStorage.get('gold-prices');
-      const silverResult = localStorage.get('silver-price');
+      const goldResult = localStorage.getItem('gold-prices');
+      const silverResult = localStorage.getItem('silver-price');
       
-      if (goldResult?.value) {
-        const savedGoldPrices = JSON.parse(goldResult.value);
+      if (goldResult) {
+        const savedGoldPrices = JSON.parse(goldResult);
         setGoldPrices(savedGoldPrices);
         setTempPrices(savedGoldPrices);
       }
       
-      if (silverResult?.value) {
-        const savedSilverPrice = JSON.parse(silverResult.value);
+      if (silverResult) {
+        const savedSilverPrice = JSON.parse(silverResult);
         setSilverPrice(savedSilverPrice);
         setTempSilverPrice(savedSilverPrice);
       }
