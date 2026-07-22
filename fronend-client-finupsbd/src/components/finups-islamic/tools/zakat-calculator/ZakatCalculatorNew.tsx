@@ -9,7 +9,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import GoldAndSilverCalculator from './GoldSilverCalculator';
 import Link from 'next/link';
 import ZakatSummaryCard from './ZakatSummaryCard';
-import { Wallet, Gem, TrendingUp, Briefcase, Home, Banknote, Package, ArrowDownCircle, Calculator, Settings, Info } from 'lucide-react';
+import ZakatWarning from './ZakatWarning';
+import { Wallet, Gem, TrendingUp, Briefcase, Home, Banknote, Package, ArrowDownCircle, Calculator, Info } from 'lucide-react';
 
 const ZakatCalculatorNew = () => {
   const [language, setLanguage] = useState<'english' | 'bangla'>('english');
@@ -211,11 +212,8 @@ const ZakatCalculatorNew = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 p-4 print:bg-white">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-6 print:mb-4">
-          {/* <h1 className="text-4xl font-bold text-emerald-800 mb-2 print:text-3xl">{t.title}</h1>
-          <p className="text-gray-600 print:text-sm">{t.subtitle}</p> */}
-          
           <div className="mt-4 flex justify-center gap-2 print:hidden">
             <Button
               onClick={() => setLanguage('english')}
@@ -234,7 +232,9 @@ const ZakatCalculatorNew = () => {
           </div>
         </div>
 
-        <Card className="shadow-lg print:shadow-none">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-3">
+            <Card className="shadow-lg print:shadow-none">
           <CardHeader className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-600 text-white print:bg-emerald-700 text-center">
             <CardTitle className="text-2xl font-bold">{t.title}</CardTitle>
             <CardDescription className="text-emerald-100 text-sm">{t.subtitle}</CardDescription>
@@ -692,6 +692,15 @@ const ZakatCalculatorNew = () => {
             </Card>
           </CardContent>
         </Card>
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-4">
+              <ZakatWarning/>
+            </div>
+          </div>
+        </div>
 
         <div className="mt-6 text-center text-sm text-gray-600 print:mt-4 print:text-xs">
           <p>{t.disclaimer}</p>
