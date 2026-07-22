@@ -10,8 +10,6 @@ import {
 } from "@/components/ui/collapsible";
 
 import {
-  SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -21,8 +19,6 @@ import {
 } from "@/components/ui/sidebar";
 
 import Link from "next/link";
-import { navList } from "./dashboard-navlist";
-import { NavProfile } from "./nav-profile";
 
 export function NavMain({
   items,
@@ -40,12 +36,7 @@ export function NavMain({
   const pathname = usePathname();
 
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel className="text-xs font-semibold uppercase text-gray-500">
-        My Profile
-      </SidebarGroupLabel>
-      <NavProfile projects={navList.profile} />
-
+    <div className="px-2 py-1">
       <SidebarMenu>
         {items.map((item) => {
           const isActive =
@@ -114,6 +105,6 @@ export function NavMain({
           );
         })}
       </SidebarMenu>
-    </SidebarGroup>
+    </div>
   );
 }

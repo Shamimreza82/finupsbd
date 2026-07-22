@@ -4,11 +4,9 @@ import { type LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import {
-  SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 
@@ -21,11 +19,10 @@ export function NavProfile({
     icon: LucideIcon;
   }[];
 }) {
-  const { isMobile } = useSidebar();
-  const pathname = usePathname(); // Get the current URL path
+  const pathname = usePathname();
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <div className="px-2 py-1">
       <SidebarMenu>
         {projects.map((item) => {
           const isActive =
@@ -36,14 +33,16 @@ export function NavProfile({
               <SidebarMenuButton asChild>
                 <Link
                   href={item.url}
-                  className={`flex items-center space-x-2 rounded-md p-2 transition ${
+                  className={`flex items-center gap-2 rounded-md px-4 py-3 text-sm font-medium transition-all duration-300 ${
                     isActive
-                      ? "border-primary bg-[#E7FDE2] text-primary"
-                      : "hover:bg-[#E7FDE2]"
+                      ? "border-l-4 border-primary bg-[#E7FDE2] text-primary"
+                      : "hover:scale-[1.02] hover:bg-slate-100 hover:text-primary"
                   }`}
                 >
                   <item.icon
-                    className={isActive ? "text-primary" : "text-gray-500"}
+                    className={`h-5 w-5 ${
+                      isActive ? "text-primary" : "text-gray-600"
+                    }`}
                   />
                   <span>{item.name}</span>
                 </Link>
@@ -52,6 +51,6 @@ export function NavProfile({
           );
         })}
       </SidebarMenu>
-    </SidebarGroup>
+    </div>
   );
 }
